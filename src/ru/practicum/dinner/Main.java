@@ -1,5 +1,6 @@
 package ru.practicum.dinner;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +14,7 @@ public class Main {
 
         while (true) {
             printMenu();
+
             String command = scanner.nextLine();
 
             switch (command) {
@@ -35,42 +37,43 @@ public class Main {
         System.out.println("3 - Выход");
     }
 
-    private static void addNewDish() {
-//        System.out.println("Введите тип блюда:");
-//        String dishType = scanner.nextLine();
-//        System.out.println("Введите название блюда:");
-//        String dishName = scanner.nextLine();
+    private static void addNewDish() { // Добавление типа и названия блюда
+        System.out.println("Введите тип блюда:");
+        String dishType = scanner.nextLine();
+        System.out.println("Введите название блюда:");
+        String dishName = scanner.nextLine();
 
-
-//        if (dishList.containsKey(dishType)) {
-//            dishList.get(dishType).add(dishName);
-//        } else {
-//            ArrayList<String> newTypeList = new ArrayList<>();
-//            newTypeList.add(dishName);
-//            dishList.put(dishType, newTypeList);
-//        }
-
-        dc.addDish();
+        dc.addDish(dishType, dishName);
     }
 
     private static void generateDishCombo() {
 
         System.out.println("Начинаем конструировать обед...");
 
-        System.out.println("Введите количество наборов, которые нужно сгенерировать:");
-        int numberOfCombos = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
         while (true) {
-            String nextItem = scanner.nextLine();
 
-            if (!nextItem.isEmpty()) { //реализация ввода типов блюд
-                dc.dishTypeChoice(nextItem);
-            } else {
-                dc.dishGenerator(numberOfCombos);
-                break;
+            System.out.println("Введите количество наборов, которые нужно сгенерировать:");
+
+            try { // Обработка исключений при вводе стокового значения вместо числового
+                int numberOfCombos = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
+                while (true) {
+                    String nextItem = scanner.nextLine();
+
+                    if (!nextItem.isEmpty()) { //реализация ввода типов блюд
+                        dc.dishTypeChoice(nextItem);
+                    } else {
+                        dc.dishGenerator(numberOfCombos);
+                        break;
+                    }
+                } // генерация комбинации блюд и вывод на экран
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка типа ввода данных: " + e.toString());
+                scanner.nextLine();
+
             }
-        } // генерация комбинации блюд и выведите на экран
+            break;
+        }
     }
 }

@@ -7,50 +7,22 @@ import java.util.Random;
 public class DinnerConstructor {
 
     Random random = new Random();
-    static HashMap<String, ArrayList<String>> dishList = new HashMap<>();
-    ArrayList<String> dishTypeCombo = new ArrayList<>();
+    static HashMap<String, ArrayList<String>> dishList = new HashMap<>(); // Объявление Хэштаблицы с типами блюд и списками блюд
+    ArrayList<String> dishTypeCombo = new ArrayList<>(); // объявление списка выбранных для комбо типов блюд
 
-    void addDish() {
-        ArrayList<String> newTypeList1 = new ArrayList<>();
-        newTypeList1.add("Щи");
-        newTypeList1.add("Борщ");
-        newTypeList1.add("Уха");
-        dishList.put("Суп", newTypeList1);
-
-        ArrayList<String> newTypeList2 = new ArrayList<>();
-        newTypeList2.add("Отбивная");
-        newTypeList2.add("Азу");
-        newTypeList2.add("Стейк");
-        dishList.put("Мясо", newTypeList2);
-
-        ArrayList<String> newTypeList3 = new ArrayList<>();
-        newTypeList3.add("Рис");
-        newTypeList3.add("Булгур");
-        newTypeList3.add("Гречка");
-        dishList.put("Гарнир", newTypeList3);
-
-        ArrayList<String> newTypeList4 = new ArrayList<>();
-        newTypeList4.add("Квас");
-        newTypeList4.add("Морс");
-        newTypeList4.add("Кола");
-        dishList.put("Напиток", newTypeList4);
-
-        ArrayList<String> newTypeList5 = new ArrayList<>();
-        newTypeList5.add("Оливье");
-        newTypeList5.add("Витаминный");
-        newTypeList5.add("Винегрет");
-        dishList.put("Салат", newTypeList5);
-
-        for (String string : dishList.keySet()) {
-            System.out.println("Теперь в типах: " + string + " следующие блюда: " + dishList.get(string));
+    void addDish(String dishType, String dishName) { // метод, добавляющий типы блюд и блюда в список
+        if (dishList.containsKey(dishType)) { // если тип уже есть в списке
+            dishList.get(dishType).add(dishName);
+        } else { // если нет
+            addNewDishTypeAndDish(dishType, dishName);
         }
     }
 
-    Boolean checkType(HashMap<String, ArrayList<String>> dishList, String dishType) {
+    Boolean checkType(HashMap<String, ArrayList<String>> dishList, String dishType) { // проврка на наличие типа в списке
         return dishList.containsKey(dishType);
     }
 
-    void dishGenerator(int numberOfCombos) {
+    void dishGenerator(int numberOfCombos) { // создание и печать комбо
         for (int i = 0; i < numberOfCombos; i++) {
             ArrayList<String> comboMenu = new ArrayList<>();
 
@@ -60,17 +32,24 @@ public class DinnerConstructor {
             System.out.println("Комбо " + (i + 1));
             System.out.println(comboMenu);
         }
+        System.out.println(); // для отделения от следующей итерации
     }
 
     String dishRandomizer(ArrayList<String> dishArrayList) {
         return dishArrayList.get(random.nextInt(dishArrayList.size()));
     }
 
-    void dishTypeChoice(String nextItem) {
+    void dishTypeChoice(String nextItem) { // добавление типа в список комбо
         if (checkType(dishList, nextItem)) {
             dishTypeCombo.add(nextItem);
         } else {
             System.out.println("Такого типа блюд нет. Выберите другой");
         }
+    }
+
+    void addNewDishTypeAndDish(String dishType, String dishName) { // добавление новых типов блюд и самих блюд
+        ArrayList<String> newTypeList = new ArrayList<>();
+        newTypeList.add(dishName);
+        dishList.put(dishType, newTypeList);
     }
 }
